@@ -1,0 +1,4 @@
+*.pbf
+volumes/tiles
+volumes/db
+*.swp

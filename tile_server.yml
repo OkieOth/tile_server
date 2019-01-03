@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+    tile_server:
+        image: "okieoth/tile_server:0.1"
+        depends_on:
+            - postgis
+        volumes:
+            - "./volumes/tiles:/opt/tiles"
+        ports:
+            - "9000:80"
+    postgis:
+        image: "mdillon/postgis:9.6-alpine"
+        environment:
+              - POSTGRES_USER=osm_db
+              - POSTGRES_PASSWORD=osmRocks!
+              - POSTGRES_DB=osm_db
+        volumes:
+            - "./volumes/db:/var/lib/postgresql/data"
