@@ -5,8 +5,10 @@ baseUrl=https://planet.openstreetmap.org/replication/minute
 # Defines the maximum time interval in seconds to download in a single invocation.
 # Setting to 0 disables this feature.
 
+maxInterval = 60
+
 # one hour of changes w/ every call
-maxInterval = 3600
+#maxInterval = 3600
 
 # six hours of changes
 #maxInterval = 21600

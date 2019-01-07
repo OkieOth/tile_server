@@ -29,10 +29,16 @@ wget "https://replicate-sequences.osm.mazdermind.de/?"`date -u +"%Y-%m-%d"`"T00:
 
 ## Implementation of the update process
  ```bash
+# step 1: fetch the changes
 # expects that the configuration files are into the current directory
 # output will also be written into host mounted dir, f.e. changesOutput
 docker run -v `pwd`:/opt/working -v ABS_PATH/changesOutput:/opt/output --rm \
     okieoth:/osmosis:0.1 osmosis --read-replication-interval workingDirectory=/opt/working \
     --simplify-change --write-xml-change file="planetdiff.osc"
+
+# step 2: write the changes to the database
+docker run -it --network tile_server_default --rm --link ${dbContainer}:pg \
+    -v ${dataDir}:/osm -v ${cartoDir}:/carto  -e PGPASSWORD=osmRocks! disrvptor/osm2pgsql \
+    -c 'osm2pgsql --append -s --cache 2000 -k --database osm_db --username osm_db --host pg -S /carto/openstreetmap-carto.style /osm/planetdiff.osc'
+
 ```
-docker run -v `pwd`:/opt/conf -v /tmp/changesOutput:/opt/output --rm okieoth:/osmosis:0.1 osmosis --read-replication-interval workingDirectory=/opt/working --simplify-change --write-xml-change file="/opt/output/planetdiff.osc"
