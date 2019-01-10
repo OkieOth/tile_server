@@ -2,3 +2,6 @@
 volumes/tiles
 volumes/db
 *.swp
+osmosis/conf/configuration.txt
+osmosis/conf/state.txt
+*.log
