@@ -24,3 +24,6 @@ echo "dbContainer: $dbContainer"
 docker run -it --network tile_server_default --rm --link ${dbContainer}:pg \
     -v ${dataDir}:/osm -v ${cartoDir}:/carto  -e PGPASSWORD=osmRocks! disrvptor/osm2pgsql \
     -c 'osm2pgsql --create --slim --cache 2000 -k --database osm_db --username osm_db --host pg -S /carto/openstreetmap-carto.style /osm/berlin-latest.osm.pbf'
+
+# restart renderd in mod_tile image to renew database connections
+$scriptPos/restartRenderd.sh

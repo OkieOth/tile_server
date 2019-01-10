@@ -41,13 +41,10 @@ if [ -f $osmosisConfDir/download.lock ]; then
     rm -f $osmosisConfDir/download.lock
 fi
 
-
-
-
 if ! docker run -it --network tile_server_default --rm --link ${dbContainer}:pg \
     -v ${osmosisChangesDir}:/osm -v ${cartoDir}:/carto  -e PGPASSWORD=osmRocks! disrvptor/osm2pgsql \
-    -c 'osm2pgsql --create --slim --cache 2000 -k --database osm_db --username osm_db --host pg \
-    --tag-transform-script /opt/carto/openstreetmap-carto.lua -S /carto/openstreetmap-carto.style /osm/diff.osc' >> $logFile
+    -c 'osm2pgsql --append --slim --cache 2000 -k --database osm_db --username osm_db --host pg \
+    -S /carto/openstreetmap-carto.style /osm/diff.osc' >> $logFile
 then
     echo "[$nowTime] error while update database, exit" | tee -a $logFile
     exit 1
